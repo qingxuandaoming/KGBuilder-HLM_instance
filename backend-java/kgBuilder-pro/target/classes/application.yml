@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: kg-builder
+  profiles:
+    active: dev,local
+
+  config:
+    import:
+      - optional:classpath:application-local.yml
+
+
+
+

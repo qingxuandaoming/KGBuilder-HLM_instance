@@ -1,0 +1,46 @@
+{
+  "groups": [
+    {
+      "name": "custom.file",
+      "type": "com.warmer.web.config.WebAppConfig",
+      "sourceType": "com.warmer.web.config.WebAppConfig"
+    },
+    {
+      "name": "custom.neo4j",
+      "type": "com.warmer.web.config.Neo4jConfig",
+      "sourceType": "com.warmer.web.config.Neo4jConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "custom.file.location",
+      "type": "java.lang.String",
+      "description": "在配置文件中配置的文件保存路径",
+      "sourceType": "com.warmer.web.config.WebAppConfig"
+    },
+    {
+      "name": "custom.file.serverurl",
+      "type": "java.lang.String",
+      "sourceType": "com.warmer.web.config.WebAppConfig"
+    },
+    {
+      "name": "custom.neo4j.password",
+      "type": "java.lang.String",
+      "sourceType": "com.warmer.web.config.Neo4jConfig"
+    },
+    {
+      "name": "custom.neo4j.url",
+      "type": "java.lang.String",
+      "sourceType": "com.warmer.web.config.Neo4jConfig"
+    },
+    {
+      "name": "custom.neo4j.username",
+      "type": "java.lang.String",
+      "sourceType": "com.warmer.web.config.Neo4jConfig"
+    }
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
+}
