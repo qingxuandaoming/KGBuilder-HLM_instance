@@ -3,7 +3,7 @@ from py2neo import Graph
 # Default configuration
 NEO4J_URI = "bolt://localhost:7687"
 NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "950302" # Default password, override in local_config.py
+NEO4J_PASSWORD = "12345678" # Default password, override in local_config.py
 
 # Try to import local configuration
 try:
