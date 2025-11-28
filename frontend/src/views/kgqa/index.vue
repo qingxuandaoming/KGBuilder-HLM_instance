@@ -47,7 +47,7 @@
 
 <script>
 import * as echarts from 'echarts';
-import axios from 'axios';
+import kgqaApi from '@/api/kgqa';
 
 export default {
   name: "KGQA",
@@ -56,7 +56,6 @@ export default {
       query: "",
       chart: null,
       profile: null,
-      pythonApiUrl: "http://localhost:5000", // Python backend URL
       categories: ["贾家荣国府", "贾家宁国府", "王家", "史家", "薛家", "其他", "林家"]
     };
   },
@@ -91,9 +90,7 @@ export default {
       
       this.chart.showLoading();
       try {
-        const response = await axios.get(`${this.pythonApiUrl}/KGQA_answer`, {
-          params: { name: this.query }
-        });
+        const response = await kgqaApi.getAnswer(this.query);
         
         // Response format from Python: [{data: [...], links: [...], meta: {...}}]
         // Check if response is array and has data
@@ -122,7 +119,7 @@ export default {
         
       } catch (error) {
         console.error("Search failed:", error);
-        this.$message.error("搜索失败，请检查Python后端服务是否启动 (端口5000)");
+        this.$message.error("搜索失败，请检查Python后端服务是否启动");
       } finally {
         this.chart.hideLoading();
       }
@@ -178,9 +175,7 @@ export default {
     },
     async getProfile(name) {
       try {
-        const response = await axios.get(`${this.pythonApiUrl}/get_profile`, {
-           params: { character_name: name }
-        });
+        const response = await kgqaApi.getProfile(name);
         // Response: [html_content, base64_image_string]
         const data = response.data;
         if (data && data.length >= 2) {

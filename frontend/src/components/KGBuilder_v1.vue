@@ -49,7 +49,7 @@ export default {
     },
     initData: {
       type: Object,
-      default: {}
+      default: () => ({})
     },
     ringFunction: {
       type: Array,
@@ -123,11 +123,19 @@ export default {
     initData: {
       handler(newvalue) {
         this.fullscreenLoading = true;
-        //console.log(newvalue)
+        if (!newvalue) {
+          this.graph.nodes = [];
+          this.graph.links = [];
+          if (this.svg) {
+            this.updateGraph();
+          }
+          this.fullscreenLoading = false;
+          return;
+        }
         const data = JSON.parse(JSON.stringify(newvalue));
         this.scale = 1;
-        this.graph.nodes = data.nodes;
-        this.graph.links = data.links;
+        this.graph.nodes = data.nodes || [];
+        this.graph.links = data.links || [];
         if (this.svg) {
           this.updateGraph();
         }

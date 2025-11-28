@@ -70,8 +70,10 @@ def get_KGQA_answer(array):
         step_data = []
         for name in current_names:
             for rn in rels:
-                cypher = f"MATCH (p)-[r:{rn}{{relation: $relation_val}}]->(n:Person{{Name:$name}}) RETURN p.Name, n.Name, r.relation, p.cate, n.cate"
-                data = graph.run(cypher, relation_val=rn, name=name)
+                # Parameterize the query safely
+                # We filter by relationship type and property
+                cypher = "MATCH (p)-[r]->(n:Person{Name:$name}) WHERE type(r)=$rn AND r.relation=$relation_val RETURN p.Name, n.Name, r.relation, p.cate, n.cate"
+                data = graph.run(cypher, rn=rn, relation_val=rn, name=name)
                 data = list(data)
                 step_data.extend(data)
                 for row in data:

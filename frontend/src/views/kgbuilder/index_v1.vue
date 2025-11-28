@@ -953,8 +953,8 @@ export default {
         if (result.code == 200) {
           if (result.data != null) {
             _this.graphData = { nodes: [], links: [] };
-            _this.graphData.nodes = result.data.node;
-            _this.graphData.links = result.data.relationship;
+            _this.graphData.nodes = result.data.node || [];
+            _this.graphData.links = result.data.relationship || [];
           }
         }
       });
@@ -1163,22 +1163,26 @@ export default {
      */
     mergeNodeAndLink(newNodes, newLinks) {
       let _this = this;
-      newNodes.forEach(function(m) {
-        let sobj = _this.graphData.nodes.find(function(x) {
-          return x.uuid === m.uuid;
+      if (newNodes) {
+        newNodes.forEach(function(m) {
+          let sobj = _this.graphData.nodes.find(function(x) {
+            return x.uuid === m.uuid;
+          });
+          if (typeof sobj == "undefined") {
+            _this.graphData.nodes.push(m);
+          }
         });
-        if (typeof sobj == "undefined") {
-          _this.graphData.nodes.push(m);
-        }
-      });
-      newLinks.forEach(function(m) {
-        let sobj = _this.graphData.links.find(function(x) {
-          return x.uuid === m.uuid;
+      }
+      if (newLinks) {
+        newLinks.forEach(function(m) {
+          let sobj = _this.graphData.links.find(function(x) {
+            return x.uuid === m.uuid;
+          });
+          if (typeof sobj == "undefined") {
+            _this.graphData.links.push(m);
+          }
         });
-        if (typeof sobj == "undefined") {
-          _this.graphData.links.push(m);
-        }
-      });
+      }
     },
     /**
      * 批量添加节点
