@@ -20,37 +20,34 @@
 
 ## 3. 详细实施步骤
 
-### 第一阶段：目录重构与环境统一
+### 第一阶段：目录重构与环境统一 (已完成)
 **目标**：整理项目结构，使其清晰可维护。
 
-1.  **根目录整理**：
-    ```text
-    /
-    ├── backend-java/       <-- 原 Neo4j-KGBuilder (后端模块)
-    ├── backend-python/     <-- 原 KGQA_HLM
-    ├── frontend/           <-- 原 Neo4j-KGBuilder/kgBuilder-ui
-    ├── docs/               <-- 文档
-    ├── scripts/            <-- 启动脚本
-    └── README.md
-    ```
+1.  **根目录整理**：(已完成)
+    *   `backend-java`: 原 Neo4j-KGBuilder 后端
+    *   `backend-python`: 原 KGQA_HLM
+    *   `frontend`: 原 Neo4j-KGBuilder 前端
 2.  **依赖管理**：
-    *   Java: 确认 Maven 构建无误。
-    *   Python: 在 `backend-python` 下生成标准 `requirements.txt`。
+    *   Java: Maven 项目结构正常。
+    *   Python: `backend-python/requirements.txt` 已存在，需补充 `flask-cors`。
 
-### 第二阶段：数据库集成
+### 第二阶段：数据库集成 (进行中)
 **目标**：确保两个系统能操作同一份数据。
 
-1.  **统一配置**：
-    *   修改 `backend-python/neo_db/config.py` (如有) 和 `backend-java/.../application-dev.yml`，使其指向同一个 Neo4j 实例（默认 `bolt://localhost:7687`）。
+1.  **统一配置**：(已完成)
+    *   **Action**: `backend-python/neo_db/config.py` 已修改，密码统一为 `123456`。
+    *   Java 端已配置为 `123456`。
 2.  **数据迁移**：
-    *   利用 `KGQA_HLM` 的 `create_graph.py` 将红楼梦数据导入 Neo4j。
+    *   利用 `backend-python/neo_db/create_graph.py` 将红楼梦数据导入 Neo4j。
     *   验证 `KGBuilder` 能否读取并可视化这些数据。
+3.  **插件依赖**：
+    *   **注意**: Neo4j 必须安装 **APOC** 插件 (如 `apoc.meta.stats` 等过程依赖此插件)，否则 Java 后端启动会报 `apoc.meta.stats` 注册错误。请将 APOC jar 包放入 Neo4j `plugins` 目录并配置 `neo4j.conf`。
 
-### 第三阶段：后端微服务化
+### 第三阶段：后端微服务化 (进行中)
 **目标**：Java 后端能够调用 Python 的 NLP 能力，或前端直接调用 Python API。
 
-1.  **Python API 增强**：
-    *   确保 `KGQA_HLM` 的 Flask 接口支持跨域 (CORS)，以便前端直接调用。
+1.  **Python API 增强**：(已完成)
+    *   **Action**: `backend-python/app.py` 已引入 `flask-cors`，`requirements.txt` 已更新。
     *   保留 `/KGQA_answer`, `/get_profile` 等核心接口。
 2.  **接口代理 (可选)**：
     *   在 Java 端建立 Proxy Controller，转发请求到 Python 端 (如 `/api/qa/*` -> `localhost:5000/*`)，这样前端只需面对一个域名。

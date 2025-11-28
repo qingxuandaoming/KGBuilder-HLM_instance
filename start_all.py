@@ -8,7 +8,8 @@ def run_java_backend():
     print("[INFO] Starting Java Backend...")
     # Assumes Maven is installed. Alternatively, run the built JAR.
     # Adjust path if necessary.
-    cwd = os.path.join(os.getcwd(), "backend-java")
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    cwd = os.path.join(base_dir, "backend-java")
     # Using 'mvn clean spring-boot:run' for kgBuilder-pro which is the web module
     # We need to target the kgBuilder-pro module
     cmd = ["mvn", "clean", "spring-boot:run", "-pl", "kgBuilder-pro", "-am"]
@@ -21,7 +22,8 @@ def run_java_backend():
 
 def run_python_backend():
     print("[INFO] Starting Python Backend...")
-    cwd = os.path.join(os.getcwd(), "backend-python")
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    cwd = os.path.join(base_dir, "backend-python")
     cmd = [sys.executable, "app.py"]
     try:
         subprocess.run(cmd, cwd=cwd, check=True)
@@ -30,7 +32,8 @@ def run_python_backend():
 
 def run_frontend():
     print("[INFO] Starting Frontend...")
-    cwd = os.path.join(os.getcwd(), "frontend")
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    cwd = os.path.join(base_dir, "frontend")
     # Assumes npm is installed
     cmd = ["npm", "run", "serve"]
     try:

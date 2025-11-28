@@ -19,7 +19,7 @@ custom:
   neo4j:
     url: ${NEO4J_URL:bolt://localhost:7687}
     username: ${NEO4J_USERNAME:neo4j}
-    password: ${NEO4J_PASSWORD:123456}
+    password: ${NEO4J_PASSWORD:12345678}
   file:
     serverurl:  http://localhost:8081
     location : D:\\kgmanager\\csv\\   #如果是Windows情况下，格式是 D:\\kgmanager\\csv\\   linux 格式"/home/kgmanager/csv/";

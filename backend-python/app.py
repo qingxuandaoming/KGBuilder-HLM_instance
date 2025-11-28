@@ -3,10 +3,12 @@
 Main application entry point for the Flask web server.
 """
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 from neo_db.query_graph import query, get_KGQA_answer, get_answer_profile
 from kgqa.ltp import get_target_array
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])

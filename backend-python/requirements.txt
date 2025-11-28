@@ -2,3 +2,4 @@ Flask>=2.0
 py2neo
 hanlp
 beautifulsoup4
+flask-cors
