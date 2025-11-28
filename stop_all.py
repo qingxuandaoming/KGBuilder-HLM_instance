@@ -31,7 +31,7 @@ def kill_process_by_port(port):
 
 def main():
     print("=== Stopping Unified Platform Services ===")
-    ports = [8081, 5000, 80, 8080] # Added 8080 just in case
+    ports = [8081, 5000, 8082] # Updated ports: Java(8081), Python(5000), Frontend(8082)
     for port in ports:
         kill_process_by_port(port)
     print("=== All Services Stopped ===")

@@ -158,6 +158,12 @@ export default {
     });
   },
   methods: {
+    escapeSelector(selector) {
+      if (selector) {
+        return selector.replace(/(:|\.|\[|\]|,|=|@)/g, "\\$1");
+      }
+      return selector;
+    },
     // 画布右击：显示空白菜单
     initContainerRightClick(event) {
       let _this = this;
@@ -664,7 +670,7 @@ export default {
           //console.log(d)
           let currentItem = menuItems[i - actionIndex];
           if (currentItem.childrens && currentItem.childrens.length > 0) {
-            let levelGroup = "#circle_menu_" + m.uuid + "_level_" + (level + 1);
+            let levelGroup = "#circle_menu_" + _this.escapeSelector(m.uuid) + "_level_" + (level + 1);
             d3.selectAll(levelGroup).style("display", "block");
             let btn =
               "g[class^='menu_" + m.uuid + "_level_" + (level + 1) + "']";
@@ -728,7 +734,7 @@ export default {
           //menu_1_level_1_pAction_0_action_0
           let menuBtnClass =
             ".menu_" +
-            m.uuid +
+            _this.escapeSelector(m.uuid) +
             "_level_" +
             level +
             "_pAction_" +
@@ -740,7 +746,7 @@ export default {
         }
         let menuBtnClass2 =
           ".menu_" +
-          m.uuid +
+          _this.escapeSelector(m.uuid) +
           "_level_" +
           level +
           "_pAction_" +
@@ -753,7 +759,7 @@ export default {
       if (level > 0 && actionIndex == 0) {
         let menuBtnClass0 =
           ".menu_" +
-          m.uuid +
+          _this.escapeSelector(m.uuid) +
           "_level_" +
           level +
           "_pAction_" +
@@ -765,7 +771,7 @@ export default {
       }
 
       if (level > 0) {
-        let levelGroup = "#circle_menu_" + m.uuid + "_level_" + level;
+        let levelGroup = "#circle_menu_" + _this.escapeSelector(m.uuid) + "_level_" + level;
         d3.selectAll(levelGroup).style("display", "none");
       }
     },
@@ -1041,10 +1047,10 @@ export default {
         .attr("font-family", "微软雅黑")
         .attr("text-anchor", "middle"); //设置文字居中
       nodeTextEnter.text(function(d) {
-        let text = d.name;
+        let text = d.name || "";
         const len = text.length;
         if (d.image) {
-          return d.name;
+          return text;
         } else {
           //取圆的半径r，两边各空出5px,然后求出文字能放的最大长度(parseInt(d.r)-5)*2,一个文字占16px(系统默认font-size=16px),
           //相除得到最多能放多少汉字，font-size换算比有待考证，文字两边和圆边框的间距忽大忽小，有缘者来优化
@@ -1052,14 +1058,14 @@ export default {
           if (dr < len) {
             return text.substring(0, dr) + "...";
           } else {
-            return d.name;
+            return text;
           }
         }
       });
       nodeTextEnter.on("click", function(d, i) {
         _this.selectNode.uuid = d.uuid;
         _this.selectNode.cname = d.name;
-        const out_buttongroup_id = ".out_buttongroup_" + d.uuid;
+        const out_buttongroup_id = ".out_buttongroup_" + _this.escapeSelector(d.uuid);
         _this.svg.selectAll(".buttongroup").style("display", "none");
         //_this.svg.selectAll(".buttongroup").classed("circle_none", true);
         _this.svg.selectAll(out_buttongroup_id).style("display", "block");
@@ -1152,7 +1158,7 @@ export default {
         });
       // 连线鼠标滑入
       linkEnter.on("mouseenter", function(d) {
-        d3.select(".Links_" + d.lk.uuid)
+        d3.select(".Links_" + _this.escapeSelector(d.lk.uuid))
           .style("stroke-width", "10")
           .attr("stroke", "#e4e2e2")
           .attr("marker-end", "");
@@ -1170,7 +1176,7 @@ export default {
       // 连线鼠标离开
       linkEnter.on("mouseleave", function(d) {
         _this.editLinkState = false;
-        d3.select(".Links_" + d.lk.uuid)
+        d3.select(".Links_" + _this.escapeSelector(d.lk.uuid))
           .style("stroke-width", 1.5)
           .attr("stroke", d => {
             if (d.color) {

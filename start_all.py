@@ -175,7 +175,7 @@ def main():
 
     print("[INFO] Java Backend: http://localhost:8081")
     print("[INFO] Python Backend: http://localhost:5000")
-    print("[INFO] Frontend: http://localhost:80")
+    print("[INFO] Frontend: http://localhost:8082")
 
     # 6. Monitor loop
     try:
@@ -183,11 +183,11 @@ def main():
         # Note: Java usually takes the longest
         java_ready = wait_for_service("http://localhost:8081", "Java Backend", timeout=120)
         python_ready = wait_for_service("http://localhost:5000", "Python Backend", timeout=30)
-        frontend_ready = wait_for_service("http://localhost:80", "Frontend", timeout=60)
+        frontend_ready = wait_for_service("http://localhost:8082", "Frontend", timeout=60)
 
         if java_ready and python_ready and frontend_ready:
             print("\n\n[SUCCESS] All systems operational!")
-            print("[INFO] Access the application at: http://localhost:80")
+            print("[INFO] Access the application at: http://localhost:8082")
         else:
             print("\n\n[WARN] Some services failed to become ready. Check logs in 'logs/' directory.")
 
