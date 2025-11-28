@@ -551,14 +551,16 @@ export default {
       }
 
       //先检查元素是否存在，避免重复画
-      let out_circle = d3.select("#out_circle" + m.uuid);
-      if (out_circle._groups[0][0] == null) {
+      let out_circle = d3.select(document.getElementById("out_circle" + m.uuid));
+      if (out_circle.empty()) {
         nodeButton.append("g").attr("id", "out_circle" + m.uuid);
       }
-      let circle_menu = d3.select("#circle_menu_" + m.uuid + "_level_" + level);
-      if (circle_menu._groups[0][0] == null) {
+      let circle_menu = d3.select(
+        document.getElementById("circle_menu_" + m.uuid + "_level_" + level)
+      );
+      if (circle_menu.empty()) {
         circle_menu = d3
-          .selectAll("#out_circle" + m.uuid)
+          .select(document.getElementById("out_circle" + m.uuid))
           .append("g")
           .attr("id", "circle_menu_" + m.uuid + "_level_" + level);
       }
@@ -566,7 +568,7 @@ export default {
       const pise = d3.pie().sort(null);
       const pisedata = pise(menuGroup);
       const buttonEnter = circle_menu
-        .selectAll("#circle_menu_" + m.uuid + "_level_" + level)
+        .selectAll("g")
         .data(pisedata)
         .enter()
         .append("g")
@@ -599,9 +601,9 @@ export default {
         .attr("stroke", "#ffffff")
         .attr("stroke-width", 2);
       menuItems.forEach((item, index) => {
-        const defs = d3
-          .selectAll("svg >defs")
-          .selectAll("#circle_menu_" + m.uuid + "_level_" + level);
+        const defs = d3.select(
+          document.getElementById("circle_menu_" + m.uuid + "_level_" + level)
+        );
         if (item.icon.type == "url") {
           const catpattern = defs
             .append("pattern")

@@ -258,13 +258,15 @@ export default {
       nodeEnter.on('click', function (d) {
         console.log('触发单击')
         _this.selectUuid = d.uuid
-        var out_buttongroup_id = '.out_buttongroup_' + d.uuid
-        var selectItem = d3.select(out_buttongroup_id)._groups[0][0]
+        // 使用 getElementsByClassName 避免选择器中特殊字符（如冒号）导致的 SyntaxError
+        var selectItem = document.getElementsByClassName(
+          'out_buttongroup_' + d.uuid
+        )[0]
         if (selectItem.classList.contains('notshow')) {
           _this.svg.selectAll('.buttongroup').classed('notshow', true)
-          d3.select(out_buttongroup_id).classed('notshow', false)
+          d3.select(selectItem).classed('notshow', false)
         } else {
-          d3.select(out_buttongroup_id).classed('notshow', true)
+          d3.select(selectItem).classed('notshow', true)
         }
         event.stopPropagation()
       })

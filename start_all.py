@@ -173,22 +173,24 @@ def main():
     frontend_log = os.path.join(logs_dir, "frontend.log")
     start_service(front_cmd, frontend_cwd, "Frontend", frontend_log)
 
-    print("\n[INFO] Services started. Waiting for health checks...")
-    
-    # Check services
-    # Note: Java usually takes the longest
-    java_ready = wait_for_service("http://localhost:8081", "Java Backend", timeout=120)
-    python_ready = wait_for_service("http://localhost:5000", "Python Backend", timeout=30)
-    frontend_ready = wait_for_service("http://localhost:8080", "Frontend", timeout=60)
-
-    if java_ready and python_ready and frontend_ready:
-        print("\n\n[SUCCESS] All systems operational!")
-        print("[INFO] Access the application at: http://localhost:8080")
-    else:
-        print("\n\n[WARN] Some services failed to become ready. Check logs in 'logs/' directory.")
+    print("[INFO] Java Backend: http://localhost:8081")
+    print("[INFO] Python Backend: http://localhost:5000")
+    print("[INFO] Frontend: http://localhost:80")
 
     # 6. Monitor loop
     try:
+        # Check services
+        # Note: Java usually takes the longest
+        java_ready = wait_for_service("http://localhost:8081", "Java Backend", timeout=120)
+        python_ready = wait_for_service("http://localhost:5000", "Python Backend", timeout=30)
+        frontend_ready = wait_for_service("http://localhost:80", "Frontend", timeout=60)
+
+        if java_ready and python_ready and frontend_ready:
+            print("\n\n[SUCCESS] All systems operational!")
+            print("[INFO] Access the application at: http://localhost:80")
+        else:
+            print("\n\n[WARN] Some services failed to become ready. Check logs in 'logs/' directory.")
+
         while True:
             time.sleep(1)
             # Check if any process has died unexpectedly
