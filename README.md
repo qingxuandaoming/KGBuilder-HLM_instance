@@ -17,7 +17,8 @@
 *   Maven 3+
 *   Python 3.10+
 *   Node.js 16+
-*   Neo4j 4.x/5.x (运行在 `bolt://localhost:7687`, 用户名 `neo4j`, 密码 `123456`)
+*   Neo4j 4.x/5.x (运行在 `bolt://localhost:7687`, 用户名 `neo4j`, 密码 `12345678`)
+*   **注意**: 必须安装 Neo4j **APOC** 插件，否则 Java 后端部分功能不可用。
 
 ### 安装依赖
 

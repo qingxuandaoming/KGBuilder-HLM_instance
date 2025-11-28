@@ -46,7 +46,14 @@ export default {
         {
           title: "首页",
           icon: "glyphicon glyphicon-cog",
-          linkUrl: "http://www.miaoleyan.com",
+          linkUrl: "/",
+          active: false,
+          childrens: []
+        },
+        {
+          title: "问答系统",
+          icon: "glyphicon glyphicon-question-sign",
+          linkUrl: "/qa",
           active: false,
           childrens: []
         },

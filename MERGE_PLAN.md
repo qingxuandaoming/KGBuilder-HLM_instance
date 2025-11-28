@@ -31,19 +31,19 @@
     *   Java: Maven 项目结构正常。
     *   Python: `backend-python/requirements.txt` 已存在，需补充 `flask-cors`。
 
-### 第二阶段：数据库集成 (进行中)
+### 第二阶段：数据库集成 (已完成)
 **目标**：确保两个系统能操作同一份数据。
 
 1.  **统一配置**：(已完成)
-    *   **Action**: `backend-python/neo_db/config.py` 已修改，密码统一为 `123456`。
-    *   Java 端已配置为 `123456`。
-2.  **数据迁移**：
-    *   利用 `backend-python/neo_db/create_graph.py` 将红楼梦数据导入 Neo4j。
-    *   验证 `KGBuilder` 能否读取并可视化这些数据。
+    *   **Action**: `backend-python/neo_db/config.py` 已修改，密码统一为 `12345678`。
+    *   Java 端已配置为 `12345678`。
+2.  **数据迁移**：(已完成)
+    *   已运行 `backend-python/neo_db/create_graph.py` 将红楼梦数据导入 Neo4j。
+    *   数据已成功写入数据库。
 3.  **插件依赖**：
     *   **注意**: Neo4j 必须安装 **APOC** 插件 (如 `apoc.meta.stats` 等过程依赖此插件)，否则 Java 后端启动会报 `apoc.meta.stats` 注册错误。请将 APOC jar 包放入 Neo4j `plugins` 目录并配置 `neo4j.conf`。
 
-### 第三阶段：后端微服务化 (进行中)
+### 第三阶段：后端微服务化 (已完成)
 **目标**：Java 后端能够调用 Python 的 NLP 能力，或前端直接调用 Python API。
 
 1.  **Python API 增强**：(已完成)
@@ -52,17 +52,17 @@
 2.  **接口代理 (可选)**：
     *   在 Java 端建立 Proxy Controller，转发请求到 Python 端 (如 `/api/qa/*` -> `localhost:5000/*`)，这样前端只需面对一个域名。
 
-### 第四阶段：前端融合
+### 第四阶段：前端融合 (进行中)
 **目标**：将红楼梦问答界面移植到 Vue。
 
 1.  **组件化**：
-    *   在 `frontend/src/views` 下新建 `QA` 目录。
-    *   将 `KGQA_HLM/templates/KGQA.html` 的逻辑移植为 `QAPanel.vue`。
-    *   将 `KGQA_HLM/templates/search.html` 的逻辑移植为 `SearchPanel.vue`。
-2.  **路由配置**：
-    *   在 `frontend/src/router/index.js` 添加 `/qa` 和 `/search` 路由。
-3.  **API 调用**：
-    *   使用 `axios` 替换原有的 jQuery AJAX 调用，指向 Python 后端接口。
+    *   已创建 `frontend/src/views/kgqa/index.vue` 实现问答系统界面。
+    *   已安装 `echarts` 依赖。
+    *   已在 `frontend/src/router/index.js` 添加 `/qa` 路由。
+    *   已在 `frontend/src/components/KGHeader.vue` 添加导航菜单。
+2.  **联调**：
+    *   前端配置访问 `http://localhost:5000` 的 Python 接口。
+    *   启动 Python 后端和 Vue 前端进行测试。
 
 ### 第五阶段：统一启动
 **目标**：一键启动所有服务。

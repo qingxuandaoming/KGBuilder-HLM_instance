@@ -43,6 +43,11 @@ const routes = [
     component: () => import("../views/icon/index.vue")
   },
   {
+    path: "/qa",
+    name: "qa",
+    component: () => import("../views/kgqa/index.vue")
+  },
+  {
     path: "/about",
     name: "About",
     // route level code-splitting

@@ -10,9 +10,18 @@ def run_java_backend():
     # Adjust path if necessary.
     base_dir = os.path.dirname(os.path.abspath(__file__))
     cwd = os.path.join(base_dir, "backend-java")
-    # Using 'mvn clean spring-boot:run' for kgBuilder-pro which is the web module
-    # We need to target the kgBuilder-pro module
-    cmd = ["mvn", "clean", "spring-boot:run", "-pl", "kgBuilder-pro", "-am"]
+    # First, build dependencies to avoid reactor issues with spring-boot:run
+    print("[INFO] Building Java dependencies (skipping tests)...")
+    build_cmd = ["mvn", "install", "-DskipTests", "-pl", "kgBuilder-pro", "-am"]
+    try:
+        subprocess.run(build_cmd, cwd=cwd, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"[ERROR] Java Build failed: {e}")
+        return
+
+    print("[INFO] Running Java Backend...")
+    # Run only the pro module without -am to avoid running goal on parent
+    cmd = ["mvn", "spring-boot:run", "-pl", "kgBuilder-pro", "-Dspring-boot.run.main-class=com.warmer.Application"]
     
     # On Windows, shell=True might be needed for mvn
     try:
@@ -34,10 +43,25 @@ def run_frontend():
     print("[INFO] Starting Frontend...")
     base_dir = os.path.dirname(os.path.abspath(__file__))
     cwd = os.path.join(base_dir, "frontend")
-    # Assumes npm is installed
-    cmd = ["npm", "run", "serve"]
+    
+    # Robust command for Windows with special chars in path
+    # We directly call vue-cli-service.js using node
+    # Use quotes for path in case of spaces, but subprocess list args handle this better
+    vue_cli_service = os.path.join(cwd, "node_modules", "@vue", "cli-service", "bin", "vue-cli-service.js")
+    
+    use_shell = False
+    if os.path.exists(vue_cli_service):
+        print(f"[INFO] Using direct vue-cli-service path: {vue_cli_service}")
+        cmd = ["node", vue_cli_service, "serve"]
+        use_shell = False
+    else:
+        print("[WARN] vue-cli-service.js not found, falling back to 'npm run serve'")
+        cmd = ["npm", "run", "serve"]
+        use_shell = True
+
     try:
-        subprocess.run(cmd, cwd=cwd, shell=True, check=True)
+        # shell=False is safer for paths with special characters like '&' when calling executables directly
+        subprocess.run(cmd, cwd=cwd, shell=use_shell, check=True)
     except subprocess.CalledProcessError as e:
         print(f"[ERROR] Frontend failed: {e}")
 
