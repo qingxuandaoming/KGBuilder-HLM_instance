@@ -797,8 +797,10 @@ export default {
           this.graph.nodes
             .filter(n => n.uuid == x)
             .map(m => {
-              m.fx = m.x + vx;
-              m.fy = m.y + vy;
+              let currentFx = (typeof m.fx === 'number' && !isNaN(m.fx)) ? m.fx : m.x;
+              let currentFy = (typeof m.fy === 'number' && !isNaN(m.fy)) ? m.fy : m.y;
+              m.fx = currentFx + vx;
+              m.fy = currentFy + vy;
               m.x = m.x + vx;
               m.y = m.y + vy;
               return m;
@@ -809,7 +811,9 @@ export default {
     dragEnded(d) {
       if (!d3.event.active) this.simulation.alphaTarget(0.3);
       let moveNodes = [];
-      moveNodes.push({ uuid: d.uuid, fx: d.fx, fy: d.fy });
+      let fx = (typeof d.fx === 'number' && !isNaN(d.fx)) ? d.fx : d.x;
+      let fy = (typeof d.fy === 'number' && !isNaN(d.fy)) ? d.fy : d.y;
+      moveNodes.push({ uuid: String(d.uuid), fx: fx, fy: fy });
       let relevantNodes = this.graph.links
         .filter(n => n.sourceId == d.uuid)
         .map(m => m.targetId);
@@ -822,7 +826,9 @@ export default {
           let targetNodes = this.graph.nodes
             .filter(n => n.uuid == targetId)
             .map(m => {
-              let item = { uuid: m.uuid, fx: m.x, fy: m.y };
+              let mFx = (typeof m.x === 'number' && !isNaN(m.x)) ? m.x : 0;
+              let mFy = (typeof m.y === 'number' && !isNaN(m.y)) ? m.y : 0;
+              let item = { uuid: String(m.uuid), fx: mFx, fy: mFy };
               return item;
             });
           moveNodes = moveNodes.concat(targetNodes);

@@ -639,7 +639,7 @@ public class KGGraphRepository implements KGGraphDao {
             if (params != null && params.size() > 0) {
                 String nodeStr = Neo4jUtil.getFilterPropertiesJson(JsonHelper.toJSONString(params));
                 String nodeCypher = String
-                        .format("UNWIND %s as row " + " MATCH (n:`%s`)  where id(n)=row.uuid SET n.fx=row.fx,n.fy=row.fy", nodeStr, domain);
+                        .format("UNWIND %s as row " + " MATCH (n:`%s`)  where elementId(n)=row.uuid SET n.fx=row.fx,n.fy=row.fy", nodeStr, domain);
                 Neo4jUtil.runCypherSql(nodeCypher);
             }
 
@@ -709,15 +709,15 @@ public class KGGraphRepository implements KGGraphDao {
     public void updateCoordinateOfNode(String domain, String uuid, Double fx, Double fy) {
         String cypher = null;
         if (fx == null && fy == null) {
-            cypher = " MATCH (n:`" + domain + "`) where ID(n)=" + uuid
+            cypher = " MATCH (n:`" + domain + "`) where elementId(n)='" + uuid + "'"
                     + " set n.fx=null, n.fy=null; ";
         } else {
             assert fx != null;
             if ("0.0".equals(fx.toString()) && "0.0".equals(fy.toString())) {
-                cypher = " MATCH (n:`" + domain + "`) where ID(n)=" + uuid
+                cypher = " MATCH (n:`" + domain + "`) where elementId(n)='" + uuid + "'"
                         + " set n.fx=null, n.fy=null; ";
             } else {
-                cypher = " MATCH (n:`" + domain + "`) where ID(n)=" + uuid
+                cypher = " MATCH (n:`" + domain + "`) where elementId(n)='" + uuid + "'"
                         + " set n.fx='" + fx + "', n.fy='" + fy + "';";
             }
         }

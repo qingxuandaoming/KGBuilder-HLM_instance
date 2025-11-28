@@ -790,7 +790,7 @@ export default {
     },
     //拖拽中
     dragged (d) {
-           let vx=d3.event.x-d.x;//x轴偏移量
+      let vx=d3.event.x-d.x;//x轴偏移量
       let vy=d3.event.y-d.y;//y轴偏移量
       d.x = d3.event.x
       d.y = d3.event.y
@@ -800,8 +800,10 @@ export default {
       if(targetNodeIds&&targetNodeIds.length>0){
         targetNodeIds.forEach(x=>{
          this.graph.nodes.filter(n=>n.uuid==x).map(m=>{
-            m.fx=m.fx+vx;
-            m.fy=m.fy+vy;
+            let currentFx = (typeof m.fx !== 'undefined' && m.fx !== null) ? m.fx : m.x;
+            let currentFy = (typeof m.fy !== 'undefined' && m.fy !== null) ? m.fy : m.y;
+            m.fx=currentFx+vx;
+            m.fy=currentFy+vy;
             m.x=m.x+vx;
             m.y=m.y+vy;
             return m;
@@ -813,12 +815,12 @@ export default {
     dragEnded (d) {
      if (!d3.event.active) this.simulation.alphaTarget(0.3)
       let moveNodes=[];
-      moveNodes.push({uuid:d.uuid,fx:d.fx,fy:d.fy})
+      moveNodes.push({uuid:String(d.uuid),fx:d.fx,fy:d.fy})
       let relevantNodes=this.graph.links.filter(n=>n.sourceId==d.uuid)
       if(relevantNodes&&relevantNodes.length>0){
         relevantNodes.forEach(x=>{
           let targetNodes=this.graph.nodes.filter(n=>n.uuid==x.targetId).map(m=>{
-            let item={uuid:m.uuid,fx:m.fx,fy:m.fy}
+            let item={uuid:String(m.uuid),fx:m.fx,fy:m.fy}
             return item;
           })
           moveNodes=moveNodes.concat(targetNodes)
